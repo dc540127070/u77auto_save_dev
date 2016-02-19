@@ -17,6 +17,7 @@ var config       = require('./config/config.js');
 var AV           = require('leanengine');
 var _AV          = require('./cloud/av.js');
 var api          = require('./api');
+var cloud        = require('./cloud.js');
 var app          = express();
 
 

@@ -83,4 +83,39 @@ router.post('/save',function(req,res){
 });
 
 
+router.post('/delete',function(req,res){
+
+	var u77Id = parseInt(req.body.u77Id);
+	var tid = parseInt(req.body.tid);
+	var sign = req.body.sign;
+
+	if(sign == crypto.createHash('md5').update(u77Id+''+tid+signKey,'utf-8').digest('hex')){
+
+		var Post = global.Post;
+		var queryPost = new AV.Query(Post);
+		queryPost.equalTo('u77Id',u77Id);
+		queryPost.equalTo('tid',tid);
+
+		queryPost.first().then(function(post){
+
+			post.destroy().then(function(result){
+				result.msg = '删除成功';
+				result.status = 0;
+				res.json(result);
+			},function(err){
+				err.msg = '删除失败';
+				err.status = 100;
+				res.json(err);
+			});
+		});
+	}else{
+		var err={
+			msg : 'sign错误，删除失败'
+		}
+		res.json(err);
+	}
+
+});
+
+
 module.exports = router;
